@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
   }
 
   ABBusqueda<Key> arbolBus;
-  ABBusqueda<Key> arbolEq;
+  ABEquilibrado<Key> arbolEq;
   int menuOpt = 1;
 
   if (abType == "abe") {
@@ -104,7 +104,63 @@ int main(int argc, char* argv[]) {
     }
   } 
   else if (abType == "abb") {
+    if(insertMethod == "random") {
+      std::srand(std::time(0));
+      for (int i = 0; i < size; i++) {
+        Key placeholder;
+        arbolBus.insert(placeholder);
+      }
+    } 
+    else if (insertMethod == "file") {
+      std::ifstream file(filename);
+      if (!file.is_open()) {
+        std::cerr << "No se pudo abrir el archivo." << std::endl;
+        return 1;
+      }
 
+      std::vector<std::string> lines;
+      std::string line;
+      while (std::getline(file, line)) {
+        lines.push_back(line);
+      }
+
+      file.close();
+
+      for (int i = 0; i < size; i++) {
+        Key input(lines[i]);
+        arbolBus.insert(input);
+      }
+    }
+
+    std::cout << arbolBus << std::endl;
+
+    while(menuOpt != 0) {
+      std::cout << "\n[0] Salir\n[1] Insertar clave\n[2] Buscar clave\n[3] Mostrar árbol inorden\n" << std::endl;
+      std::cin >> menuOpt;
+      if (menuOpt == 1) {
+        std::string inputString;
+        std::cout << "Introduzca la clave a insertar: ";
+        std::cin >> inputString;
+
+        Key input(inputString);
+        arbolBus.insert(input);
+        std::cout << arbolBus << std::endl;
+      } else if (menuOpt == 2) {
+        std::string inputString;
+        std::cout << "Introduzca la clave a buscar:\n";
+        std::cin >> inputString;
+      
+        Key input(inputString);
+        std::cout << (arbolBus.search(input) ? "\nEncontrado" : "\nNo Encontrado") << std::endl;
+      } else if (menuOpt == 3) {
+        std::cout << std::endl;
+        arbolBus.inorden();
+      } else if (menuOpt == 0) {
+        break;
+      } else {
+        std::cout << "\n Seleccione una opción válida.\n";
+      }
+    }
   } else {
     std::cerr << "Opción no válida: " << abType << std::endl;
   }

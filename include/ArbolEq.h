@@ -9,9 +9,8 @@ template <class Key>
 class ABEquilibrado : public AB<Key> {
 public:
   // Constructor
-  ABEquilibrado(int numNodo) {
+  ABEquilibrado() {
     this->raiz = nullptr;
-    this->numNodos = numNodo;
   }
 
   int getNumNode() const {
@@ -28,6 +27,7 @@ public:
     NodoB<Key>* actual = this->getRaiz();
     if (actual == nullptr) {
       this->getRaiz() = nuevo;
+      this->numNodos++;
       return true;
     }
 
@@ -40,6 +40,7 @@ public:
 
       if (actual->getIzdo() == nullptr) {
         actual->getIzdo() = nuevo;
+        this->numNodos++;
         return true;
       } else {
         cola.push(actual->getIzdo());
@@ -47,6 +48,7 @@ public:
 
       if (actual->getDcho() == nullptr) {
         actual->getDcho() = nuevo;
+        this->numNodos++;
         return true;
       } else {
         cola.push(actual->getDcho());
